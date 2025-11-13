@@ -10,8 +10,8 @@ export const api = axios.create({
 
 // Response interceptor for error handling
 api.interceptors.response.use(
-  (response) => response,
-  async (error) => {
+  response => response,
+  async error => {
     if (error.response?.status === 401) {
       // Token expired - redirect to login
       if (typeof window !== 'undefined') {

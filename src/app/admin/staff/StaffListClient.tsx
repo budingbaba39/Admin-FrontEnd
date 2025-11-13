@@ -28,9 +28,9 @@ export default function StaffListClient() {
     if (!searchTerm.trim()) return staff;
 
     const searchLower = searchTerm.toLowerCase();
-    return staff.filter(s =>
-      s.name.toLowerCase().includes(searchLower) ||
-      s.username.toLowerCase().includes(searchLower)
+    return staff.filter(
+      s =>
+        s.name.toLowerCase().includes(searchLower) || s.username.toLowerCase().includes(searchLower)
     );
   }, [staff, searchTerm]);
 
@@ -85,7 +85,7 @@ export default function StaffListClient() {
           <Input
             placeholder="Search by name or username..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={e => setSearchTerm(e.target.value)}
             className="h-9"
           />
         </div>
@@ -121,7 +121,7 @@ export default function StaffListClient() {
               </TableRow>
             </TableHeader>
             <TableBody className="divide-y divide-gray-200 dark:divide-gray-700 text-sm">
-              {filteredStaff.map((staffMember) => (
+              {filteredStaff.map(staffMember => (
                 <TableRow key={staffMember.id} className="hover:bg-gray-50 dark:hover:bg-gray-700">
                   <TableCell className="px-3 py-2 font-medium text-gray-900 dark:text-gray-200 text-xs">
                     {staffMember.name}

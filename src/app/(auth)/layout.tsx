@@ -2,11 +2,7 @@
 
 import { useEffect } from 'react';
 
-export default function AuthLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AuthLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     // Force remove dark class from html when on auth pages
     document.documentElement.classList.remove('dark');

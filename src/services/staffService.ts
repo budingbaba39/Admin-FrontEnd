@@ -24,30 +24,24 @@ function getToken(): string | null {
     return null;
   }
 
-  const token = tokenCookie.split('=')[1];
-  console.log('Token found:', token.substring(0, 20) + '...');
-  return token;
+  return tokenCookie.split('=')[1];
 }
 
-interface ApiResponse<T = any> {
+interface ApiResponse<T> {
   message: string;
   data: T;
   error: null | string;
 }
 
-export async function getAllStaff(
-  params: GetAllStaffParams = {}
-): Promise<GetAllStaffResponse> {
+export async function getAllStaff(params: GetAllStaffParams = {}): Promise<GetAllStaffResponse> {
   // Check if mock mode is enabled
   if (USE_MOCK_DATA) {
-    console.log('🎭 Using mock data for getAllStaff');
     return mockStaffApi.getAll(params);
   }
 
   const token = getToken();
 
   if (!token) {
-    console.error('No auth token found');
     throw new Error('Unauthorized');
   }
 
@@ -62,8 +56,6 @@ export async function getAllStaff(
   const url = `${API_URL}/admin/staff/get-all`;
   const fullUrl = queryParams.toString() ? `${url}?${queryParams.toString()}` : url;
 
-  console.log('Fetching staff from:', fullUrl);
-
   try {
     const response = await fetch(fullUrl, {
       method: 'GET',
@@ -73,29 +65,22 @@ export async function getAllStaff(
       },
     });
 
-    console.log('Staff API response status:', response.status);
-
     if (!response.ok) {
       const error = await response.json();
       console.error('Staff API error:', error);
       throw new Error(error.message || 'Failed to fetch staff');
     }
 
-    const data = await response.json();
-    console.log('Staff data received:', data);
-    return data;
+    return response.json();
   } catch (error) {
     console.error('Error fetching staff:', error);
     throw error;
   }
 }
 
-export async function createStaff(
-  data: CreateStaffDTO
-): Promise<ApiResponse<Staff>> {
+export async function createStaff(data: CreateStaffDTO): Promise<ApiResponse<Staff>> {
   // Check if mock mode is enabled
   if (USE_MOCK_DATA) {
-    console.log('🎭 Using mock data for createStaff');
     return mockStaffApi.create(data);
   }
 
@@ -122,13 +107,9 @@ export async function createStaff(
   return response.json();
 }
 
-export async function updateStaff(
-  id: number,
-  data: UpdateStaffDTO
-): Promise<ApiResponse<Staff>> {
+export async function updateStaff(id: number, data: UpdateStaffDTO): Promise<ApiResponse<Staff>> {
   // Check if mock mode is enabled
   if (USE_MOCK_DATA) {
-    console.log('🎭 Using mock data for updateStaff');
     return mockStaffApi.update(id, data);
   }
 
@@ -158,7 +139,6 @@ export async function updateStaff(
 export async function deleteStaff(id: number): Promise<ApiResponse<Staff>> {
   // Check if mock mode is enabled
   if (USE_MOCK_DATA) {
-    console.log('🎭 Using mock data for deleteStaff');
     return mockStaffApi.delete(id);
   }
 

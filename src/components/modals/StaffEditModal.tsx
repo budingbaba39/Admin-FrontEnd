@@ -1,13 +1,8 @@
 import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -19,12 +14,16 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { useStaff } from '@/hooks/useStaff';
-import type { Staff } from '@/types/staff';
+import type { Staff, UpdateStaffDTO, CreateStaffDTO } from '@/types/staff';
 
 const staffSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   username: z.string().min(3, 'Username must be at least 3 characters'),
-  password: z.string().min(6, 'Password must be at least 6 characters').optional().or(z.literal('')),
+  password: z
+    .string()
+    .min(6, 'Password must be at least 6 characters')
+    .optional()
+    .or(z.literal('')),
   status: z.enum(['ACTIVE', 'INACTIVE']),
 });
 
@@ -43,14 +42,11 @@ export default function StaffEditModal({ staff, isOpen, onClose }: StaffEditModa
     register,
     handleSubmit,
     reset,
-    setValue,
-    watch,
+    control,
     formState: { errors },
   } = useForm<StaffFormData>({
     resolver: zodResolver(staffSchema),
   });
-
-  const statusValue = watch('status');
 
   useEffect(() => {
     if (staff) {
@@ -71,7 +67,7 @@ export default function StaffEditModal({ staff, isOpen, onClose }: StaffEditModa
   }, [staff, reset]);
 
   const onSubmit = (data: StaffFormData) => {
-    const submitData: any = {
+    const submitData: UpdateStaffDTO = {
       name: data.name,
       username: data.username,
       status: data.status,
@@ -84,11 +80,17 @@ export default function StaffEditModal({ staff, isOpen, onClose }: StaffEditModa
     if (staff) {
       updateStaff({ id: staff.id, data: submitData });
     } else {
-      if (!submitData.password) {
-        alert('Password is required when creating a new staff member');
+      if (!submitData.password || !submitData.name || !submitData.username) {
+        alert('All fields are required when creating a new staff member');
         return;
       }
-      createStaff(submitData);
+      const createData: CreateStaffDTO = {
+        name: submitData.name,
+        username: submitData.username,
+        password: submitData.password,
+        status: submitData.status || 'ACTIVE',
+      };
+      createStaff(createData);
     }
     onClose();
   };
@@ -118,9 +120,7 @@ export default function StaffEditModal({ staff, isOpen, onClose }: StaffEditModa
                   placeholder="Enter full name"
                   className="w-full h-10"
                 />
-                {errors.name && (
-                  <p className="text-sm text-red-600 mt-1">{errors.name.message}</p>
-                )}
+                {errors.name && <p className="text-sm text-red-600 mt-1">{errors.name.message}</p>}
               </div>
 
               <div>
@@ -137,9 +137,7 @@ export default function StaffEditModal({ staff, isOpen, onClose }: StaffEditModa
                 {errors.username && (
                   <p className="text-sm text-red-600 mt-1">{errors.username.message}</p>
                 )}
-                {staff && (
-                  <p className="text-xs text-gray-500 mt-1">Username cannot be changed</p>
-                )}
+                {staff && <p className="text-xs text-gray-500 mt-1">Username cannot be changed</p>}
               </div>
 
               <div>
@@ -165,18 +163,21 @@ export default function StaffEditModal({ staff, isOpen, onClose }: StaffEditModa
                 <Label htmlFor="status" className="block text-sm font-medium text-gray-700 mb-1">
                   Status *
                 </Label>
-                <Select
-                  value={statusValue}
-                  onValueChange={(value) => setValue('status', value as 'ACTIVE' | 'INACTIVE')}
-                >
-                  <SelectTrigger className="w-full h-10">
-                    <SelectValue placeholder="Select status" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ACTIVE">ACTIVE</SelectItem>
-                    <SelectItem value="INACTIVE">INACTIVE</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Controller
+                  name="status"
+                  control={control}
+                  render={({ field }) => (
+                    <Select value={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="w-full h-10">
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="ACTIVE">ACTIVE</SelectItem>
+                        <SelectItem value="INACTIVE">INACTIVE</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  )}
+                />
                 {errors.status && (
                   <p className="text-sm text-red-600 mt-1">{errors.status.message}</p>
                 )}

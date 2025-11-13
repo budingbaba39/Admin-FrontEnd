@@ -27,7 +27,7 @@ export async function getAdminAuth(): Promise<Staff | null> {
     token = decodeURIComponent(token);
 
     // Decode JWT token (don't verify - backend will verify on API calls)
-    const decoded = jwt.decode(token) as any;
+    const decoded = jwt.decode(token) as { id?: number; username?: string; name?: string } | null;
 
     if (!decoded || !decoded.id || !decoded.username) {
       console.error('Token decode failed or missing required fields:', decoded);

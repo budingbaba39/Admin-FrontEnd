@@ -1,12 +1,11 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { getAllStaff, createStaff, updateStaff, deleteStaff } from '@/services/staffService';
-import type { CreateStaffDTO, UpdateStaffDTO, GetAllStaffParams } from '@/types/staff';
+import type { UpdateStaffDTO, GetAllStaffParams } from '@/types/staff';
 import { useState } from 'react';
 
 export function useStaff() {
   const queryClient = useQueryClient();
-  const [params, setParams] = useState<GetAllStaffParams>({
-  });
+  const [params, setParams] = useState<GetAllStaffParams>({});
 
   const staffQuery = useQuery({
     queryKey: ['staff', params],
@@ -23,8 +22,7 @@ export function useStaff() {
   });
 
   const updateMutation = useMutation({
-    mutationFn: ({ id, data }: { id: number; data: UpdateStaffDTO }) =>
-      updateStaff(id, data),
+    mutationFn: ({ id, data }: { id: number; data: UpdateStaffDTO }) => updateStaff(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['staff'] });
     },
