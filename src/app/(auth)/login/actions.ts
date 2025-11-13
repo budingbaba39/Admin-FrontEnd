@@ -28,9 +28,7 @@ export async function adminLogin(formData: FormData) {
     let result;
 
     if (USE_MOCK_DATA) {
-      console.log('🎭 Using mock data (backend disabled)');
       result = await mockAuthApi.login(validation.data);
-      console.log('🎭 Mock login result:', result);
     } else {
       const response = await fetch(`${API_URL}/admin/auth/login`, {
         method: 'POST',
@@ -45,9 +43,7 @@ export async function adminLogin(formData: FormData) {
       }
     }
 
-    console.log('✅ Login successful, setting token:', result.data.token);
     await setAdminToken(result.data.token);
-    console.log('✅ Token set, redirecting to dashboard...');
     redirect('/admin/dashboard');
   } catch (error) {
     // Next.js redirect() throws NEXT_REDIRECT error - this is expected behavior
@@ -58,7 +54,7 @@ export async function adminLogin(formData: FormData) {
     console.error('Login error:', error);
 
     if (!USE_MOCK_DATA) {
-      console.log('Backend unavailable, using mock data fallback');
+      console.warn('Backend unavailable, using mock data fallback');
       try {
         const mockResult = await mockAuthApi.login(validation.data);
         await setAdminToken(mockResult.data.token);

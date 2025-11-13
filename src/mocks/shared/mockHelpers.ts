@@ -7,21 +7,20 @@
 /**
  * Simulate network delay
  */
-export const delay = (ms: number = 500) =>
-  new Promise(resolve => setTimeout(resolve, ms));
+export const delay = (ms: number = 500) => new Promise(resolve => setTimeout(resolve, ms));
 
 /**
  * Create a fake JWT token (Base64 encoded JSON) that can be decoded
  * Format: header.payload.signature
  */
-export function createMockJWT(staff: any): string {
+export function createMockJWT(staff: { id: number; username: string; name: string }): string {
   const header = { alg: 'HS256', typ: 'JWT' };
   const payload = {
     id: staff.id,
     username: staff.username,
     name: staff.name,
     iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + (60 * 60 * 24 * 7), // 7 days
+    exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, // 7 days
   };
 
   // Convert to Base64 URL-safe format (remove padding '=' for JWT compatibility)

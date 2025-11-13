@@ -17,8 +17,7 @@ interface SidebarProps {
 export default function Sidebar({ className = '', onNavigate }: SidebarProps = {}) {
   const pathname = usePathname();
   const dispatch = useAppDispatch();
-  const { staff } = useAppSelector((state) => state.adminAuth);
-  const { isDarkMode } = useAppSelector((state) => state.theme);
+  const { isDarkMode } = useAppSelector(state => state.theme);
 
   const handleNavClick = () => {
     if (onNavigate) {
@@ -44,7 +43,9 @@ export default function Sidebar({ className = '', onNavigate }: SidebarProps = {
   ];
 
   return (
-    <aside className={`bg-white dark:bg-gray-900 border-r border-[#e8eaf6] dark:border-gray-700 flex flex-col transition-colors duration-300 ${className}`}>
+    <aside
+      className={`bg-white dark:bg-gray-900 border-r border-[#e8eaf6] dark:border-gray-700 flex flex-col transition-colors duration-300 ${className}`}
+    >
       {/* Search */}
       <div className="p-4">
         <div className="bg-[#e8eaf6] dark:bg-gray-800 p-3 rounded-lg">
@@ -63,7 +64,7 @@ export default function Sidebar({ className = '', onNavigate }: SidebarProps = {
 
       {/* Main Menu */}
       <nav className="flex-1 px-4 space-y-2 overflow-y-auto">
-        {navItems.map((item) => {
+        {navItems.map(item => {
           const Icon = item.icon;
           const isActive = pathname === item.path;
 

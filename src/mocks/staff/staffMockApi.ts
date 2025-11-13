@@ -5,12 +5,7 @@
  */
 
 import { delay, generateMockId, getCurrentTimestamp } from '../shared/mockHelpers';
-import {
-  getMockStaffList,
-  addMockStaff,
-  updateMockStaff,
-  deleteMockStaff,
-} from './staffMockData';
+import { getMockStaffList, addMockStaff, updateMockStaff, deleteMockStaff } from './staffMockData';
 import type { Staff, CreateStaffDTO, UpdateStaffDTO, GetAllStaffParams } from '@/types/staff';
 
 export const mockStaffApi = {
@@ -25,9 +20,10 @@ export const mockStaffApi = {
     // Apply search filter
     if (params.search) {
       const searchLower = params.search.toLowerCase();
-      staffList = staffList.filter(s =>
-        s.name.toLowerCase().includes(searchLower) ||
-        s.username.toLowerCase().includes(searchLower)
+      staffList = staffList.filter(
+        s =>
+          s.name.toLowerCase().includes(searchLower) ||
+          s.username.toLowerCase().includes(searchLower)
       );
     }
 

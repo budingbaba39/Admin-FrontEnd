@@ -18,7 +18,11 @@ type LoginFormData = z.infer<typeof loginSchema>;
 
 export default function AdminLoginForm() {
   const [error, setError] = useState('');
-  const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm<LoginFormData>({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
 
@@ -44,9 +48,7 @@ export default function AdminLoginForm() {
           placeholder="Enter username"
           className="h-[56px] rounded-[8px]"
         />
-        {errors.username && (
-          <p className="text-sm text-red-600 mt-1">{errors.username.message}</p>
-        )}
+        {errors.username && <p className="text-sm text-red-600 mt-1">{errors.username.message}</p>}
       </div>
 
       <div>
@@ -58,14 +60,10 @@ export default function AdminLoginForm() {
           placeholder="Enter password"
           className="h-[56px] rounded-[8px]"
         />
-        {errors.password && (
-          <p className="text-sm text-red-600 mt-1">{errors.password.message}</p>
-        )}
+        {errors.password && <p className="text-sm text-red-600 mt-1">{errors.password.message}</p>}
       </div>
 
-      {error && (
-        <p className="text-sm text-red-600">Invalid credentials. Please try again.</p>
-      )}
+      {error && <p className="text-sm text-red-600">Invalid credentials. Please try again.</p>}
 
       <Button
         type="submit"
