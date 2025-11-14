@@ -15,11 +15,17 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { useStaff } from '@/hooks/useStaff';
+import { useAppSelector } from '@/store/hooks';
 import StaffEditModal from '@/components/modals/StaffEditModal';
 import type { Staff } from '@/types/staff';
 
 export default function StaffListClient() {
-  const { staff, isLoading, deleteStaff } = useStaff();
+  const { staff: fetchedStaff, isLoading: isFetching, deleteStaff } = useStaff();
+  const { staff: preloadedStaff, isLoaded } = useAppSelector(state => state.preload);
+
+  // Use preloaded data if available, otherwise use fetched data
+  const staff = isLoaded && preloadedStaff.length > 0 ? preloadedStaff : fetchedStaff;
+  const isLoading = !isLoaded && isFetching;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedStaff, setSelectedStaff] = useState<Staff | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
