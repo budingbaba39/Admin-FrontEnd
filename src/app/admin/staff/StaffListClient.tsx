@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { toast } from 'sonner';
 import {
   Table,
   TableBody,
@@ -47,6 +48,7 @@ export default function StaffListClient() {
   const handleDelete = (id: number) => {
     if (confirm('Are you sure you want to delete this staff member?')) {
       deleteStaff(id);
+      toast.success('Staff member deleted successfully');
     }
   };
 

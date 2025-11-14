@@ -6,6 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
 import {
   Select,
   SelectContent,
@@ -79,9 +80,10 @@ export default function StaffEditModal({ staff, isOpen, onClose }: StaffEditModa
 
     if (staff) {
       updateStaff({ id: staff.id, data: submitData });
+      toast.success('Staff member updated successfully');
     } else {
       if (!submitData.password || !submitData.name || !submitData.username) {
-        alert('All fields are required when creating a new staff member');
+        toast.error('All fields are required when creating a new staff member');
         return;
       }
       const createData: CreateStaffDTO = {
@@ -91,6 +93,7 @@ export default function StaffEditModal({ staff, isOpen, onClose }: StaffEditModa
         status: submitData.status || 'ACTIVE',
       };
       createStaff(createData);
+      toast.success('Staff member created successfully');
     }
     onClose();
   };

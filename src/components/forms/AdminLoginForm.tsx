@@ -35,6 +35,9 @@ export default function AdminLoginForm() {
     const result = await adminLogin(formData);
     if (result?.error) {
       setError(result.error);
+      toast.error(result.error);
+    } else {
+      toast.success('Login successful! Redirecting...');
     }
   };
 
