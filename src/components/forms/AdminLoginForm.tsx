@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { adminLogin } from '@/app/(auth)/login/actions';
 import { useState } from 'react';
+import { toast } from 'sonner';
 
 const loginSchema = z.object({
   username: z.string().min(3, 'Username must be at least 3 characters'),
@@ -35,6 +36,9 @@ export default function AdminLoginForm() {
     const result = await adminLogin(formData);
     if (result?.error) {
       setError(result.error);
+      toast.error(result.error);
+    } else {
+      toast.success('Login successful! Redirecting...');
     }
   };
 
