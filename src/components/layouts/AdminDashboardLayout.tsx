@@ -1,8 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useAppDispatch } from '@/store/hooks';
+import { useAppDispatch, useAppSelector } from '@/store/hooks';
 import { setAdminAuth } from '@/store/slices/adminAuthSlice';
+import { preloadStaffData } from '@/store/slices/preloadSlice';
 import Sidebar from './Sidebar';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
@@ -28,6 +29,7 @@ export default function AdminDashboardLayout({ children, staff }: AdminDashboard
   const dispatch = useAppDispatch();
   const isDesktop = useMediaQuery('(min-width: 768px)');
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { isLoaded } = useAppSelector(state => state.preload);
 
   // Sync server-fetched staff with Redux store
   useEffect(() => {
@@ -35,6 +37,13 @@ export default function AdminDashboardLayout({ children, staff }: AdminDashboard
       dispatch(setAdminAuth(staff));
     }
   }, [staff, dispatch]);
+
+  // Preload data after login (runs once)
+  useEffect(() => {
+    if (staff && !isLoaded) {
+      dispatch(preloadStaffData());
+    }
+  }, [staff, isLoaded, dispatch]);
 
   // Auto-open sidebar on desktop, auto-close on mobile
   useEffect(() => {

@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useAppSelector, useAppDispatch } from '@/store/hooks';
 import { toggleTheme } from '@/store/slices/themeSlice';
 import { clearAdminAuth } from '@/store/slices/adminAuthSlice';
+import { clearPreloadData } from '@/store/slices/preloadSlice';
 import { adminLogout } from '@/app/admin/logout/actions';
 
 interface SidebarProps {
@@ -28,6 +29,7 @@ export default function Sidebar({ className = '', onNavigate }: SidebarProps = {
   const handleLogout = async () => {
     // Clear Redux state immediately
     dispatch(clearAdminAuth());
+    dispatch(clearPreloadData());
     // Then clear cookies and redirect
     await adminLogout();
   };
